@@ -1,19 +1,21 @@
 const WebSocket = require('ws');
 
-const wss = new WebSocket.Server({ port: 8080 });
+// Use dynamic port for Render, fallback to 8080 locally
+const PORT = process.env.PORT || 8080;
+const wss = new WebSocket.Server({ port: PORT });
 
-const messages = []; // store chat history
+const messages = []; // chat history
 
 wss.on('connection', (ws) => {
     console.log('New client connected');
 
-    // Send existing chat history to new client
+    // Send existing chat history to new clients
     messages.forEach(msg => ws.send(JSON.stringify(msg)));
 
     ws.on('message', (data) => {
         try {
-            const message = JSON.parse(data); // expect client JSON
-            messages.push(message); // save to history
+            const message = JSON.parse(data);
+            messages.push(message);
 
             // Broadcast to all clients
             wss.clients.forEach(client => {
@@ -29,4 +31,4 @@ wss.on('connection', (ws) => {
     ws.on('close', () => console.log('Client disconnected'));
 });
 
-console.log('WebSocket server running on ws://localhost:8080');
+console.log(`WebSocket server running on port ${PORT}`);

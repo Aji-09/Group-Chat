@@ -89,7 +89,7 @@
                 "#" + Math.floor(Math.random() * 16777215).toString(16);
 
             // Connect to local WebSocket server
-            const ws = new WebSocket("ws://localhost:8080");
+            const ws = new WebSocket("wss://group-chat-og5d.onrender.com");
 
             const messagesDiv = document.getElementById("chat-messages");
             const input = document.getElementById("messageInput");
